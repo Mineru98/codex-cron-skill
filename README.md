@@ -13,6 +13,8 @@ Loop or schedule any `codex exec` job — locally, safely, from your terminal.
 ![tests](https://img.shields.io/badge/tests-73%20passing-2ea44f?style=flat-square)
 ![node](https://img.shields.io/badge/node-%E2%89%A518-111827?style=flat-square)
 
+English | [한국어](README.ko.md) | [中文](README.zh-CN.md) | [日本語](README.ja.md)
+
 </div>
 
 ---
