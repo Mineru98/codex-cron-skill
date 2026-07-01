@@ -24,6 +24,9 @@
     "recurring"
   ],
   "skills": "./skills/",
+  "hooks": [
+    "./hooks/user-prompt-submit-loading-cron-context.json"
+  ],
   "interface": {
     "displayName": "Codex Cron",
     "shortDescription": "Cron, intervals & one-shot Codex runs",
@@ -32,6 +35,8 @@
     "category": "Developer Tools",
     "capabilities": [
       "Interactive",
+      "Hooks",
+      "Context Injection",
       "Write",
       "Workflow"
     ],
