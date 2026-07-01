@@ -5,12 +5,12 @@
 # Codex Cron
 
 **Cron for your Codex prompts.**
-Loop or schedule any `codex exec` job — locally, safely, from your terminal.
+Loop or schedule Codex prompts — locally, safely, from your terminal or tmux.
 
 ![license](https://img.shields.io/badge/license-MIT-C6A15B?style=flat-square)
 ![codex](https://img.shields.io/badge/Codex-plugin-111827?style=flat-square)
 ![deps](https://img.shields.io/badge/dependencies-0-2ea44f?style=flat-square)
-![tests](https://img.shields.io/badge/tests-73%20passing-2ea44f?style=flat-square)
+![tests](https://img.shields.io/badge/tests-77%20passing-2ea44f?style=flat-square)
 ![node](https://img.shields.io/badge/node-%E2%89%A518-111827?style=flat-square)
 
 English | [한국어](README.ko.md) | [中文](README.zh-CN.md) | [日本語](README.ja.md)
@@ -20,6 +20,12 @@ English | [한국어](README.ko.md) | [中文](README.zh-CN.md) | [日本語](RE
 ---
 
 Codex runs a prompt **once**. Codex Cron makes it run **on a schedule** — every _N_ minutes, on a cron expression, or once at a set time — and keeps the plumbing honest: a single-runner lock, unbounded run logs, and a safety allowlist that refuses to weaken your sandbox.
+
+For `schedule`, due prompts are delivered with the `auto` runner by default:
+
+1. `tmux-send` — if `--tmux-target` or `TMUX_PANE` points at a running Codex pane, paste the prompt there and press Enter.
+2. `resume-command` — if `--resume-command` is provided, run that local hook with the prompt on stdin.
+3. `codex-exec` — otherwise fall back to a fresh `codex exec` run for compatibility.
 
 Two tiny, zero-dependency skills:
 
@@ -66,7 +72,10 @@ node plugins/codex-cron/skills/loop/scripts/loop.mjs daemon --state-root .codex/
 node plugins/codex-cron/skills/schedule/scripts/schedule.mjs \
   add --state-root .codex/schedule --cron "0 9 * * 1" \
   --prompt "summarize open PRs" --cwd "$PWD"
-node plugins/codex-cron/skills/schedule/scripts/schedule.mjs daemon --state-root .codex/schedule
+node plugins/codex-cron/skills/schedule/scripts/schedule.mjs daemon \
+  --state-root .codex/schedule \
+  --runner auto \
+  --tmux-target "$TMUX_PANE"
 ```
 
 Nothing fires unless a `daemon` is running — it holds a single-runner lock, so you never double-fire.
@@ -74,9 +83,10 @@ Nothing fires unless a `daemon` is running — it holds a single-runner lock, so
 ## Not a toy
 
 - **Single-runner lock** — atomic `mkdir` acquire + rename compare-and-swap reclaim. No duplicate daemons; crash-left locks are recovered safely, never by deleting a live one.
+- **Interactive delivery first** — `schedule` prefers tmux prompt injection, then a local resume hook, then `codex exec`. You can force any mode with `--runner tmux-send`, `--runner resume-command`, or `--runner codex-exec`.
 - **Safe by default** — `--codex-arg` pass-through is a *default-deny allowlist*. Sandbox / approval / config-bypass flags (`--sandbox danger-full-access`, `--full-auto`, `--dangerously-…`) are refused and never reach `codex exec`.
 - **Full run capture** — every run streams unbounded to its own `runs/<taskId>/<ts>.jsonl` + last-message file. No 1 MB truncation, real exit codes preserved.
-- **Zero dependencies** — pure Node ESM + `node:test`. 73 tests green (loop 33, schedule 40), including adversarial safety and lock-race cases.
+- **Zero dependencies** — pure Node ESM + `node:test`. 77 tests green (loop 33, schedule 44), including adversarial safety and lock-race cases.
 - **No OS cron / launchd** — nothing is installed behind your back. The daemon runs only while you run it.
 
 ## loop vs schedule
@@ -101,7 +111,7 @@ For durable, always-on scheduling that survives reboots and closed terminals, us
 - `parse-loop` / `parse-schedule` — validate specs to JSON without touching state
 - `add` / `list` / `cancel` / `status` — manage tasks in `tasks.json` (atomic temp+rename writes)
 - `run-due` — fire everything due in one pass (great for CI triggers)
-- `daemon` — poll on an interval; `--once`, `--max-runs N`, `--poll-ms`, `--codex-bin`
+- `daemon` — poll on an interval; `--once`, `--max-runs N`, `--poll-ms`, `--runner`, `--codex-bin`, `--tmux-target`, `--resume-command`
 - `doctor` — read-only health check (state root, lock, codex binary, local-ignore guidance)
 
 Run state (`tasks.json`, `scheduled_tasks.lock/`, `runs/`) is **local-only** — git-ignore it; never commit it.

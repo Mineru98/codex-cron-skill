@@ -5,12 +5,12 @@
 # Codex Cron
 
 **给 Codex 提示词用的 cron。**
-在终端里本地、安全地循环或定时运行任何 `codex exec` 任务。
+在终端或 tmux 里本地、安全地循环或定时运行 Codex 提示词。
 
 ![license](https://img.shields.io/badge/license-MIT-C6A15B?style=flat-square)
 ![codex](https://img.shields.io/badge/Codex-plugin-111827?style=flat-square)
 ![deps](https://img.shields.io/badge/dependencies-0-2ea44f?style=flat-square)
-![tests](https://img.shields.io/badge/tests-73%20passing-2ea44f?style=flat-square)
+![tests](https://img.shields.io/badge/tests-77%20passing-2ea44f?style=flat-square)
 ![node](https://img.shields.io/badge/node-%E2%89%A518-111827?style=flat-square)
 
 [English](README.md) | [한국어](README.ko.md) | 中文 | [日本語](README.ja.md)
@@ -20,6 +20,12 @@
 ---
 
 Codex 只会把提示词运行 **一次**。Codex Cron 可以让它 **按计划** 运行：每 _N_ 分钟一次、按 cron 表达式运行，或在指定时间运行一次。同时它会把基础机制做扎实：单运行者锁、无限制运行日志，以及不会削弱沙箱的安全 allowlist。
+
+`schedule` 默认使用 `auto` runner，并按以下优先级投递到期提示词：
+
+1. `tmux-send` — 如果 `--tmux-target` 或 `TMUX_PANE` 指向正在运行的 Codex pane，就把提示词粘贴进去并按 Enter。
+2. `resume-command` — 如果提供了 `--resume-command`，就运行该本地 hook，并把提示词通过 stdin 传入。
+3. `codex-exec` — 如果前两者都不可用，则为了兼容性 fallback 到新的 `codex exec` 运行。
 
 两个很小、零依赖的技能：
 
@@ -66,7 +72,10 @@ node plugins/codex-cron/skills/loop/scripts/loop.mjs daemon --state-root .codex/
 node plugins/codex-cron/skills/schedule/scripts/schedule.mjs \
   add --state-root .codex/schedule --cron "0 9 * * 1" \
   --prompt "summarize open PRs" --cwd "$PWD"
-node plugins/codex-cron/skills/schedule/scripts/schedule.mjs daemon --state-root .codex/schedule
+node plugins/codex-cron/skills/schedule/scripts/schedule.mjs daemon \
+  --state-root .codex/schedule \
+  --runner auto \
+  --tmux-target "$TMUX_PANE"
 ```
 
 只有在 `daemon` 运行时任务才会触发。它持有单运行者锁，因此不会重复触发。
@@ -74,9 +83,10 @@ node plugins/codex-cron/skills/schedule/scripts/schedule.mjs daemon --state-root
 ## 不是玩具
 
 - **单运行者锁** — atomic `mkdir` 获取锁，并用 rename compare-and-swap 回收。不会出现重复 daemon；崩溃遗留的锁会安全恢复，而不是删除仍在使用的锁。
+- **优先投递到交互会话** — `schedule` 会依次选择 tmux 输入注入、本地 resume hook、`codex exec`。也可以用 `--runner tmux-send`、`--runner resume-command`、`--runner codex-exec` 强制指定模式。
 - **默认安全** — `--codex-arg` 透传采用 *default-deny allowlist*。沙箱、审批、配置绕过类参数（`--sandbox danger-full-access`、`--full-auto`、`--dangerously-...`）都会被拒绝，绝不会传到 `codex exec`。
 - **完整运行捕获** — 每次运行都会无限制流式写入自己的 `runs/<taskId>/<ts>.jsonl` 和最后消息文件。没有 1 MB 截断，并保留真实退出码。
-- **零依赖** — 纯 Node ESM + `node:test`。73 个测试通过（loop 33 个，schedule 40 个），覆盖对抗性安全场景和锁竞争场景。
+- **零依赖** — 纯 Node ESM + `node:test`。77 个测试通过（loop 33 个，schedule 44 个），覆盖对抗性安全场景和锁竞争场景。
 - **不使用 OS cron / launchd** — 不会在背后安装任何东西。daemon 只在你运行它时运行。
 
 ## loop vs schedule
@@ -101,7 +111,7 @@ node plugins/codex-cron/skills/schedule/scripts/schedule.mjs daemon --state-root
 - `parse-loop` / `parse-schedule` — 在不触碰状态的情况下把规格验证成 JSON
 - `add` / `list` / `cancel` / `status` — 在 `tasks.json` 中管理任务（atomic temp+rename 写入）
 - `run-due` — 一次执行所有到期任务（适合 CI 触发）
-- `daemon` — 按间隔轮询；支持 `--once`、`--max-runs N`、`--poll-ms`、`--codex-bin`
+- `daemon` — 按间隔轮询；支持 `--once`、`--max-runs N`、`--poll-ms`、`--runner`、`--codex-bin`、`--tmux-target`、`--resume-command`
 - `doctor` — 只读健康检查（状态根目录、锁、codex 二进制、local-ignore 指引）
 
 运行状态（`tasks.json`、`scheduled_tasks.lock/`、`runs/`）是 **仅本地** 数据。请 git-ignore，不要提交。
