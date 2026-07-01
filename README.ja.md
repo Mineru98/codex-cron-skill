@@ -1,6 +1,6 @@
 <div align="center">
 
-![Codex Cron](plugins/codex-cron/assets/og.png)
+![Codex Cron](plugins/codex-cron/assets/op-image.png)
 
 # Codex Cron
 
