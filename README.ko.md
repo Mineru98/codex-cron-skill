@@ -40,9 +40,17 @@ codex plugin add codex-cron@mineru98
 Codex에 자연어로 요청하면 알맞은 스킬을 선택합니다.
 
 ```
-loop every 10 minutes: check CI status and ping me if red
-schedule "0 9 * * 1": summarize the open PRs and post a digest
-run once at 2026-07-04T09:00:00Z: draft the release notes
+10분마다 반복해서 CI 상태를 확인하고 실패하면 알려줘
+매주 월요일 09시에 열린 PR을 요약해서 다이제스트를 작성해줘
+2026-07-04T09:00:00Z에 한 번만 릴리스 노트를 초안으로 작성해줘
+```
+
+라우팅을 확실히 지정하고 싶다면 `$loop` / `$schedule`처럼 스킬 이름을 명시할 수 있습니다.
+
+```
+$loop 10분마다 CI 상태를 확인하고 실패하면 알려줘
+$schedule "0 9 * * 1": 열린 PR을 요약해서 다이제스트를 작성해줘
+$schedule at 2026-07-04T09:00:00Z: 릴리스 노트를 초안으로 작성해줘
 ```
 
 번들 스크립트를 직접 실행할 수도 있습니다.

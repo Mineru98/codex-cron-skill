@@ -45,6 +45,14 @@ schedule "0 9 * * 1": summarize the open PRs and post a digest
 run once at 2026-07-04T09:00:00Z: draft the release notes
 ```
 
+Or name the skill explicitly with `$loop` / `$schedule` when you want deterministic routing:
+
+```
+$loop every 10 minutes: check CI status and ping me if red
+$schedule "0 9 * * 1": summarize the open PRs and post a digest
+$schedule at 2026-07-04T09:00:00Z: draft the release notes
+```
+
 Or drive the bundled scripts directly:
 
 ```bash

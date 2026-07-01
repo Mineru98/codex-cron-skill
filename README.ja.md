@@ -40,9 +40,17 @@ codex plugin add codex-cron@mineru98
 Codex にそのまま依頼すると、適切なスキルが選ばれます。
 
 ```
-loop every 10 minutes: check CI status and ping me if red
-schedule "0 9 * * 1": summarize the open PRs and post a digest
-run once at 2026-07-04T09:00:00Z: draft the release notes
+10分ごとにCIの状態を確認し、失敗していたら知らせて
+毎週月曜09:00に未対応のPRを要約してダイジェストを作って
+2026-07-04T09:00:00Zに一度だけリリースノートの下書きを作って
+```
+
+ルーティングを明示したい場合は、`$loop` / `$schedule` のようにスキル名を指定できます。
+
+```
+$loop 10分ごとにCIの状態を確認し、失敗していたら知らせて
+$schedule "0 9 * * 1": 未対応のPRを要約してダイジェストを作って
+$schedule at 2026-07-04T09:00:00Z: リリースノートの下書きを作って
 ```
 
 同梱スクリプトを直接実行することもできます。

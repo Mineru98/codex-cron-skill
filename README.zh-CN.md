@@ -40,9 +40,17 @@ codex plugin add codex-cron@mineru98
 直接告诉 Codex，它会选择正确的技能：
 
 ```
-loop every 10 minutes: check CI status and ping me if red
-schedule "0 9 * * 1": summarize the open PRs and post a digest
-run once at 2026-07-04T09:00:00Z: draft the release notes
+每 10 分钟检查 CI 状态，如果失败就提醒我
+每周一 09:00 汇总打开的 PR 并生成摘要
+在 2026-07-04T09:00:00Z 只运行一次，起草发布说明
+```
+
+如果想明确指定路由，也可以用 `$loop` / `$schedule` 写出技能名：
+
+```
+$loop 每 10 分钟检查 CI 状态，如果失败就提醒我
+$schedule "0 9 * * 1": 汇总打开的 PR 并生成摘要
+$schedule at 2026-07-04T09:00:00Z: 起草发布说明
 ```
 
 也可以直接运行打包的脚本：
