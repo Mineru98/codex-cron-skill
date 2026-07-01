@@ -10,7 +10,7 @@ Loop or schedule Codex prompts — locally, safely, from your terminal or tmux.
 ![license](https://img.shields.io/badge/license-MIT-C6A15B?style=flat-square)
 ![codex](https://img.shields.io/badge/Codex-plugin-111827?style=flat-square)
 ![deps](https://img.shields.io/badge/dependencies-0-2ea44f?style=flat-square)
-![tests](https://img.shields.io/badge/tests-77%20passing-2ea44f?style=flat-square)
+![tests](https://img.shields.io/badge/tests-81%20passing-2ea44f?style=flat-square)
 ![node](https://img.shields.io/badge/node-%E2%89%A518-111827?style=flat-square)
 
 English | [한국어](README.ko.md) | [中文](README.zh-CN.md) | [日本語](README.ja.md)
@@ -86,7 +86,7 @@ Nothing fires unless a `daemon` is running — it holds a single-runner lock, so
 - **Interactive delivery first** — `schedule` prefers tmux prompt injection, then a local resume hook, then `codex exec`. You can force any mode with `--runner tmux-send`, `--runner resume-command`, or `--runner codex-exec`.
 - **Safe by default** — `--codex-arg` pass-through is a *default-deny allowlist*. Sandbox / approval / config-bypass flags (`--sandbox danger-full-access`, `--full-auto`, `--dangerously-…`) are refused and never reach `codex exec`.
 - **Full run capture** — every run streams unbounded to its own `runs/<taskId>/<ts>.jsonl` + last-message file. No 1 MB truncation, real exit codes preserved.
-- **Zero dependencies** — pure Node ESM + `node:test`. 77 tests green (loop 33, schedule 44), including adversarial safety and lock-race cases.
+- **Zero dependencies** — pure Node ESM + `node:test`. 81 tests green (loop 33, schedule 44, app hook 4), including adversarial safety and lock-race cases.
 - **No OS cron / launchd** — nothing is installed behind your back. The daemon runs only while you run it.
 
 ## loop vs schedule
@@ -115,6 +115,11 @@ For durable, always-on scheduling that survives reboots and closed terminals, us
 - `doctor` — read-only health check (state root, lock, codex binary, local-ignore guidance)
 
 Run state (`tasks.json`, `scheduled_tasks.lock/`, `runs/`) is **local-only** — git-ignore it; never commit it.
+
+## Release notes
+
+- [0.1.0](docs/release-0.1.0.md) — initial loop and schedule skills.
+- [0.2.0](docs/release-0.2.0.md) — Codex App hook context loading.
 
 ## License
 

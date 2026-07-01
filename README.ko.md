@@ -10,7 +10,7 @@
 ![license](https://img.shields.io/badge/license-MIT-C6A15B?style=flat-square)
 ![codex](https://img.shields.io/badge/Codex-plugin-111827?style=flat-square)
 ![deps](https://img.shields.io/badge/dependencies-0-2ea44f?style=flat-square)
-![tests](https://img.shields.io/badge/tests-77%20passing-2ea44f?style=flat-square)
+![tests](https://img.shields.io/badge/tests-81%20passing-2ea44f?style=flat-square)
 ![node](https://img.shields.io/badge/node-%E2%89%A518-111827?style=flat-square)
 
 [English](README.md) | 한국어 | [中文](README.zh-CN.md) | [日本語](README.ja.md)
@@ -86,7 +86,7 @@ node plugins/codex-cron/skills/schedule/scripts/schedule.mjs daemon \
 - **대화형 전달 우선** — `schedule`은 tmux 입력 주입, 로컬 resume hook, `codex exec` 순서로 선택합니다. `--runner tmux-send`, `--runner resume-command`, `--runner codex-exec`로 특정 모드를 강제할 수 있습니다.
 - **기본 안전성** — `--codex-arg` 전달은 *default-deny allowlist*입니다. 샌드박스, 승인, 설정 우회 플래그(`--sandbox danger-full-access`, `--full-auto`, `--dangerously-...`)는 거부되어 `codex exec`에 도달하지 않습니다.
 - **전체 실행 캡처** — 모든 실행은 각자의 `runs/<taskId>/<ts>.jsonl`과 마지막 메시지 파일로 제한 없이 스트리밍됩니다. 1 MB 잘림이 없고 실제 종료 코드를 보존합니다.
-- **의존성 없음** — 순수 Node ESM과 `node:test`만 사용합니다. 안전성 및 잠금 경쟁 adversarial 케이스를 포함해 77개 테스트가 통과합니다(loop 33개, schedule 44개).
+- **의존성 없음** — 순수 Node ESM과 `node:test`만 사용합니다. 안전성 및 잠금 경쟁 adversarial 케이스를 포함해 81개 테스트가 통과합니다(loop 33개, schedule 44개, app hook 4개).
 - **OS cron / launchd 없음** — 몰래 설치되는 것이 없습니다. daemon은 사용자가 실행하는 동안에만 동작합니다.
 
 ## loop vs schedule

@@ -10,7 +10,7 @@
 ![license](https://img.shields.io/badge/license-MIT-C6A15B?style=flat-square)
 ![codex](https://img.shields.io/badge/Codex-plugin-111827?style=flat-square)
 ![deps](https://img.shields.io/badge/dependencies-0-2ea44f?style=flat-square)
-![tests](https://img.shields.io/badge/tests-77%20passing-2ea44f?style=flat-square)
+![tests](https://img.shields.io/badge/tests-81%20passing-2ea44f?style=flat-square)
 ![node](https://img.shields.io/badge/node-%E2%89%A518-111827?style=flat-square)
 
 [English](README.md) | [한국어](README.ko.md) | 中文 | [日本語](README.ja.md)
@@ -86,7 +86,7 @@ node plugins/codex-cron/skills/schedule/scripts/schedule.mjs daemon \
 - **优先投递到交互会话** — `schedule` 会依次选择 tmux 输入注入、本地 resume hook、`codex exec`。也可以用 `--runner tmux-send`、`--runner resume-command`、`--runner codex-exec` 强制指定模式。
 - **默认安全** — `--codex-arg` 透传采用 *default-deny allowlist*。沙箱、审批、配置绕过类参数（`--sandbox danger-full-access`、`--full-auto`、`--dangerously-...`）都会被拒绝，绝不会传到 `codex exec`。
 - **完整运行捕获** — 每次运行都会无限制流式写入自己的 `runs/<taskId>/<ts>.jsonl` 和最后消息文件。没有 1 MB 截断，并保留真实退出码。
-- **零依赖** — 纯 Node ESM + `node:test`。77 个测试通过（loop 33 个，schedule 44 个），覆盖对抗性安全场景和锁竞争场景。
+- **零依赖** — 纯 Node ESM + `node:test`。81 个测试通过（loop 33 个，schedule 44 个，app hook 4 个），覆盖对抗性安全场景和锁竞争场景。
 - **不使用 OS cron / launchd** — 不会在背后安装任何东西。daemon 只在你运行它时运行。
 
 ## loop vs schedule

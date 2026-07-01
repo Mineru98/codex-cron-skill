@@ -46,11 +46,17 @@ with the prompt on stdin. Stdout streams straight to `runs/<taskId>/<ts>.jsonl` 
 
 `tasks.json`, `scheduled_tasks.lock/`, and `runs/` are runtime state. Git-ignore them; do not commit.
 
+## Release notes
+
+- [0.1.0](../../docs/release-0.1.0.md) — initial loop and schedule skills.
+- [0.2.0](../../docs/release-0.2.0.md) — Codex App hook context loading.
+
 ## Tests
 
 ```bash
 node --test skills/loop/scripts/loop.test.mjs        # 33 tests
 node --test skills/schedule/scripts/schedule.test.mjs # 44 tests
+node --test scripts/codex-app-hook.test.mjs           # 4 tests
 ```
 
 MIT © 2026 Mineru98.
