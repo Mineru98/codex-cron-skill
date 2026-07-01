@@ -1,0 +1,14 @@
+# Runtime state produced by the skills (local-only; never commit)
+.codex/loop/
+.codex/schedule/
+**/scheduled_tasks.lock/
+**/scheduled_tasks.lock.stale.*/
+**/runs/
+
+# Image generation scratch (keep only curated assets under codex-cron/assets/)
+/images/
+
+# OS / tooling
+.DS_Store
+node_modules/
+*.log

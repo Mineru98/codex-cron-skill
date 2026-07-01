@@ -1,0 +1,16 @@
+{
+  "name": "mineru98",
+  "interface": {
+    "displayName": "Mineru98 Plugins"
+  },
+  "plugins": [
+    {
+      "name": "codex-cron",
+      "source": {
+        "source": "local",
+        "path": "./plugins/codex-cron"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "name": "codex-cron",
+  "version": "0.1.0",
+  "description": "Schedule and loop Codex prompts locally — cron, fixed intervals, and one-shot runs executed through `codex exec`, guarded by a single-runner lock.",
+  "author": {
+    "name": "Mineru98",
+    "email": "Mineru98@users.noreply.github.com",
+    "url": "https://github.com/Mineru98"
+  },
+  "homepage": "https://github.com/Mineru98/codex-cron-skill",
+  "repository": "https://github.com/Mineru98/codex-cron-skill",
+  "license": "MIT",
+  "keywords": [
+    "codex",
+    "codex-plugin",
+    "cron",
+    "scheduler",
+    "schedule",
+    "loop",
+    "interval",
+    "automation",
+    "daemon",
+    "codex-exec",
+    "recurring"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Codex Cron",
+    "shortDescription": "Cron, intervals & one-shot Codex runs",
+    "longDescription": "Codex Cron packages two standalone skills — loop (fixed-interval repeats) and schedule (5-field cron plus one-shot --at) — that register prompts and fire them non-interactively through `codex exec`. A single-runner daemon holds an atomic directory lock, each run streams unbounded to its own JSONL log, and a default-deny allowlist keeps sandbox/approval-bypassing flags out. Recommend Codex app Automations for always-on durable schedules; this is the terminal-native local fallback.",
+    "developerName": "Mineru98",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive",
+      "Write",
+      "Workflow"
+    ],
+    "websiteURL": "https://github.com/Mineru98/codex-cron-skill",
+    "composerIcon": "./assets/icon.png",
+    "logo": "./assets/logo.png",
+    "defaultPrompt": [
+      "Run this Codex prompt every 10 minutes",
+      "Schedule a Codex prompt with cron 0 9 * * 1",
+      "Summarize open PRs every weekday at 9am"
+    ],
+    "brandColor": "#C6A15B",
+    "screenshots": []
+  }
+}
