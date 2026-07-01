@@ -4,7 +4,7 @@
   "description": "Schedule and loop Codex prompts locally — cron, fixed intervals, and one-shot runs executed through `codex exec`, guarded by a single-runner lock.",
   "author": {
     "name": "Mineru98",
-    "email": "Mineru98@users.noreply.github.com",
+    "email": "mineru@usefullabs.co.kr",
     "url": "https://github.com/Mineru98"
   },
   "homepage": "https://github.com/Mineru98/codex-cron-skill",
